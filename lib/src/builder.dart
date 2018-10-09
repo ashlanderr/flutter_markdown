@@ -84,7 +84,7 @@ abstract class MarkdownBuilderDelegate {
 ///  * [Markdown], which is a widget that parses and displays Markdown.
 class MarkdownBuilder implements md.NodeVisitor {
   /// Creates an object that builds a [Widget] tree from parsed Markdown.
-  MarkdownBuilder({ this.delegate, this.styleSheet, this.imageDirectory });
+  MarkdownBuilder({ this.delegate, this.styleSheet, this.imageDirectory, this.alignment });
 
   /// A delegate that controls how link and `pre` elements behave.
   final MarkdownBuilderDelegate delegate;
@@ -94,6 +94,8 @@ class MarkdownBuilder implements md.NodeVisitor {
 
   /// The base directory holding images referenced by Img tags with local file paths.
   final Directory imageDirectory;
+
+  final CrossAxisAlignment alignment;
 
   final List<String> _listIndents = <String>[];
   final List<_BlockElement> _blocks = <_BlockElement>[];
@@ -179,7 +181,7 @@ class MarkdownBuilder implements md.NodeVisitor {
 
       if (current.children.isNotEmpty) {
         child = new Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: alignment ?? CrossAxisAlignment.stretch,
           children: current.children,
         );
       } else {

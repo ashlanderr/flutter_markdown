@@ -46,6 +46,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     this.syntaxHighlighter,
     this.onTapLink,
     this.imageDirectory,
+    this.alignment,
   }) : assert(data != null),
        super(key: key);
 
@@ -67,6 +68,8 @@ abstract class MarkdownWidget extends StatefulWidget {
 
   /// The base directory holding images referenced by Img tags with local file paths.
   final Directory imageDirectory;
+
+  final CrossAxisAlignment alignment;
 
   /// Subclasses should override this function to display the given children,
   /// which are the parsed representation of [data].
@@ -113,6 +116,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> implements MarkdownBuil
       delegate: this,
       styleSheet: styleSheet,
       imageDirectory: widget.imageDirectory,
+      alignment: widget.alignment,
     );
     _children = builder.build(document.parseLines(lines));
   }
@@ -166,6 +170,7 @@ class MarkdownBody extends MarkdownWidget {
     SyntaxHighlighter syntaxHighlighter,
     MarkdownTapLinkCallback onTapLink,
     Directory imageDirectory,
+    CrossAxisAlignment alignment,
   }) : super(
     key: key,
     data: data,
@@ -173,6 +178,7 @@ class MarkdownBody extends MarkdownWidget {
     syntaxHighlighter: syntaxHighlighter,
     onTapLink: onTapLink,
     imageDirectory: imageDirectory,
+    alignment: alignment,
   );
 
   @override
@@ -180,7 +186,7 @@ class MarkdownBody extends MarkdownWidget {
     if (children.length == 1)
       return children.single;
     return new Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: alignment ?? CrossAxisAlignment.stretch,
       children: children,
     );
   }
